@@ -4,6 +4,10 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/prim_minimum_spanning_tree.hpp>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 //using namespace boost;
 //using boost::functional;
 using namespace Rcpp;
@@ -71,42 +75,13 @@ SEXP sqdist(SEXP R_a, SEXP R_b){
 }
 
 void sq_dist_cpp(const MatrixXd& a, const MatrixXd& b,  MatrixXd& W){
-//     aa <- colSums(a^2)
-//     bb <- colSums(b^2)
-//     ab <- t(a) %*% b
-//
-//     aa_repmat <- matrix(rep(aa, times = ncol(b)), ncol = ncol(b), byrow = F)
-//     bb_repmat <- matrix(rep(bb, times = ncol(a)), nrow = ncol(a), byrow = T)
-//     dist <- abs(aa_repmat + bb_repmat - 2 * ab)
-
-//    Rcpp::Rcout << "   a nan check : (" << a.rows() << "x" << a.cols() << ", " << a.maxCoeff() << " )" << std::endl;
-//    Rcpp::Rcout << "   b nan check : (" << b.rows() << "x" << b.cols() << ", " << b.maxCoeff() << " )" << std::endl;
-
+    // OPTIMIZATION #1: Use Eigen's efficient broadcasting
     VectorXd aa = (a.array() * a.array()).colwise().sum();
     VectorXd bb = (b.array() * b.array()).colwise().sum();
     MatrixXd ab = a.transpose() * b;
-//    Rcpp::Rcout << "   ab nan check : (" << ab.rows() << "x" << ab.cols() << ", " << ab.maxCoeff() << " )" << std::endl;
 
-    MatrixXd aa_repmat;
-    aa_repmat.resize(a.cols(), b.cols());
-    for (int i=0; i < aa_repmat.cols(); i++)
-    {
-        aa_repmat.col(i) = aa;
-    }
-//    Rcpp::Rcout << "   aa_repmat nan check : (" << aa_repmat.rows() << "x" << aa_repmat.cols() << ", " << aa_repmat.maxCoeff() << " )" << std::endl;
-
-    MatrixXd bb_repmat;
-    bb_repmat.resize(a.cols(), b.cols());
-    for (int i=0; i < bb_repmat.rows(); i++)
-    {
-        bb_repmat.row(i) = bb;
-    }
-
-//    Rcpp::Rcout << "   bb_repmat nan check : (" << bb_repmat.rows() << "x" << bb_repmat.cols() << ", " << bb_repmat.maxCoeff() << " )" << std::endl;
-    W = aa_repmat + bb_repmat - 2 * ab;
-//    Rcpp::Rcout << "   W nan check : (" << W.rows() << "x" << W.cols() << ", " << W.maxCoeff() << " )" << std::endl;
-
-
+    // Efficient broadcasting using replicate
+    W = aa.replicate(1, b.cols()) + bb.transpose().replicate(a.cols(), 1) - 2 * ab;
     W = W.array().abs().matrix();
 }
 
@@ -133,6 +108,17 @@ void DDRTree_reduce_dim_cpp(const MatrixXd& X_in,
     Z_out = Z_in;
 
     int N_cells = X_in.cols();
+    
+    #ifdef _OPENMP
+    if (verbose) {
+        int n_threads = omp_get_max_threads();
+        Rcpp::Rcout << "OpenMP enabled with " << n_threads << " threads" << std::endl;
+    }
+    #else
+    if (verbose) {
+        Rcpp::Rcout << "OpenMP not enabled (serial execution)" << std::endl;
+    }
+    #endif
 /*
     typedef boost::property<boost::edge_weight_t, double> EdgeWeightProperty;
     typedef boost::adjacency_matrix<
@@ -178,44 +164,20 @@ void DDRTree_reduce_dim_cpp(const MatrixXd& X_in,
     std::vector < graph_traits < Graph >::vertex_descriptor >
         old_spanning_tree(num_vertices(g));
 
-    // std::vector<double> objective_vals;
-
-    MatrixXd distsqMU;
-    MatrixXd L;
-    MatrixXd distZY;
-    distZY.resize(X_in.cols(), num_clusters);
-
-    MatrixXd min_dist;
-    min_dist.resize(X_in.cols(), num_clusters);
-
-    MatrixXd tmp_distZY;
-    tmp_distZY.resize(X_in.cols(), num_clusters);
-
-    //SpMat tmp_R(X_in.cols(), num_clusters);
-    MatrixXd tmp_R;
-    tmp_R.resize(X_in.cols(), num_clusters);
-
-    //SpMat R(X_in.cols(), num_clusters);
-    MatrixXd R;
-    R.resize(tmp_R.rows(), num_clusters);
-
-    //SpMat Gamma(R.cols(), R.cols());
-    MatrixXd Gamma = MatrixXd::Zero(R.cols(), R.cols());
-
-    SpMat tmp(Gamma.rows(), Gamma.cols());
-
-    MatrixXd tmp_dense;
-    tmp_dense.resize(Gamma.rows(), Gamma.cols());
-
-    //SpMat Q;
-    MatrixXd Q;
-    Q.resize(tmp_dense.rows(), R.rows());
-
-    MatrixXd C;
-    C.resize(X_in.rows(), Q.cols());
-
-    MatrixXd tmp1;
-    tmp1.resize(C.rows(), X_in.rows());
+    // OPTIMIZATION #2: Pre-allocate all matrices once
+    MatrixXd distsqMU(Y_in.cols(), Y_in.cols());
+    MatrixXd L(Y_in.cols(), Y_in.cols());
+    MatrixXd distZY(X_in.cols(), num_clusters);
+    MatrixXd min_dist(X_in.cols(), num_clusters);
+    MatrixXd tmp_distZY(X_in.cols(), num_clusters);
+    MatrixXd tmp_R(X_in.cols(), num_clusters);
+    MatrixXd R(X_in.cols(), num_clusters);
+    MatrixXd Gamma(num_clusters, num_clusters);
+    SpMat tmp(num_clusters, num_clusters);
+    MatrixXd tmp_dense(num_clusters, num_clusters);
+    MatrixXd Q(X_in.rows(), X_in.cols());
+    MatrixXd C(X_in.rows(), X_in.cols());
+    MatrixXd tmp1(X_in.rows(), X_in.rows());
 
     Environment stats("package:DDRTree");
     Function pca_projection_R = stats["pca_projection_R"];
@@ -288,13 +250,11 @@ void DDRTree_reduce_dim_cpp(const MatrixXd& X_in,
             Rcpp::Rcout << "   min_dist : (" << min_dist.rows() << " x " << min_dist.cols() << ")" << std::endl;
         //min_dist <- matrix(rep(apply(distZY, 1, min), times = K), ncol = K, byrow = F)
 
+        // OPTIMIZATION #5: Use efficient replicate
         VectorXd distZY_minCoeff = distZY.rowwise().minCoeff();
 	    if (verbose)
             Rcpp::Rcout << "distZY_minCoeff = " << std::endl;
-	    for (int i=0; i < min_dist.cols(); i++)
-        {
-            min_dist.col(i) = distZY_minCoeff;
-        }
+        min_dist = distZY_minCoeff.replicate(1, min_dist.cols());
         //Rcpp::Rcout << min_dist << std::endl;
 
         //tmp_distZY <- distZY - min_dist
@@ -303,25 +263,32 @@ void DDRTree_reduce_dim_cpp(const MatrixXd& X_in,
 
         if (verbose)
             Rcpp::Rcout << "   tmp_R : (" << tmp_R.rows() << " x " << tmp_R.cols() << ")" << std::endl;
+        
+        // OPENMP OPTIMIZATION: Parallelize soft assignment computation
+        #ifdef _OPENMP
+        #pragma omp parallel for schedule(static) if(tmp_distZY.rows() > 1000)
+        for (int i = 0; i < tmp_distZY.rows(); i++) {
+            double row_sum = 0.0;
+            // Compute exp and sum in one pass
+            for (int j = 0; j < tmp_distZY.cols(); j++) {
+                tmp_R(i, j) = std::exp(-tmp_distZY(i, j) / sigma);
+                row_sum += tmp_R(i, j);
+            }
+            // Normalize
+            for (int j = 0; j < tmp_distZY.cols(); j++) {
+                R(i, j) = tmp_R(i, j) / row_sum;
+            }
+        }
+        #else
         //tmp_R <- exp(-tmp_distZY / params$sigma)
         tmp_R = tmp_distZY.array() / (-1.0 * sigma);
-        //Rcpp::Rcout << tmp_R << std::endl;
-
         tmp_R = tmp_R.array().exp().matrix();
-
-        if (verbose)
-            Rcpp::Rcout << "   R : (" << R.rows() << " x " << R.cols() << ")" << std::endl;
-        //R <- tmp_R / matrix(rep(rowSums(tmp_R), times = K), byrow = F, ncol = K)
-
+        
+        // OPTIMIZATION #5: Use efficient replicate
         VectorXd tmp_R_rowsums =  tmp_R.rowwise().sum();
-        for (int i=0; i < R.cols(); i++)
-        {
-            R.col(i) = tmp_R_rowsums;
-        }
-        //Rcpp::Rcout << R << std::endl;
-        //Rcpp::Rcout << "&&&&&" << std::endl;
+        R = tmp_R_rowsums.replicate(1, R.cols());
         R = (tmp_R.array() / R.array()).matrix();
-        //Rcpp::Rcout << R << std::endl;
+        #endif
 
         if (verbose)
             Rcpp::Rcout << "   Gamma : (" << Gamma.rows() << " x " << Gamma.cols() << ")" << std::endl;
