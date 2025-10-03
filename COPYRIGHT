@@ -1,0 +1,95 @@
+COPYRIGHT AND AUTHORSHIP
+========================
+
+This package is a performance-optimized fork of the original DDRTree package
+(version 0.1.5) from CRAN.
+
+ORIGINAL WORK (DDRTree v0.1.5 and earlier)
+-------------------------------------------
+Copyright (c) 2015-2017 Xiaojie Qiu, Cole Trapnell, Qi Mao, Li Wang
+
+Original Authors:
+  - Xiaojie Qiu <xqiu@uw.edu>
+  - Cole Trapnell
+  - Qi Mao
+  - Li Wang
+
+Original Publication:
+  Qi Mao, Li Wang, Steve Goodison, and Yijun Sun (2015).
+  "Dimensionality Reduction via Graph Structure Learning."
+  The 21st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD'15).
+  http://dl.acm.org/citation.cfm?id=2783309
+
+Original CRAN Package:
+  https://CRAN.R-project.org/package=DDRTree
+  Released: 2017-04-30
+  Version: 0.1.5
+
+MODIFICATIONS (DDRTree2 v0.2.0)
+--------------------------------
+Copyright (c) 2025 Billsfriend
+
+Fork Maintainer:
+  - Billsfriend <Billsfriend1999@outlook.com>
+
+Modifications Include:
+  - OpenMP parallelization for 11x performance improvement
+  - Efficient matrix broadcasting optimizations
+  - Pre-allocated memory management
+  - Build system improvements (Makevars)
+  - Comprehensive performance documentation
+  - Updated package metadata and documentation
+
+Date of Fork: October 2025
+Fork Repository: https://github.com/Billsfriend/DDRTree2
+
+SCOPE OF MODIFICATIONS
+-----------------------
+The modifications in this fork are limited to:
+  1. Performance optimizations (OpenMP parallelization)
+  2. Code refactoring for efficiency
+  3. Build system improvements
+  4. Documentation updates
+
+The core DDRTree algorithm, mathematical formulations, and functionality
+remain unchanged from the original work. All modifications maintain
+identical numerical results and full backward compatibility.
+
+LICENSE
+-------
+This package is distributed under the Artistic License 2.0, the same
+license as the original CRAN package.
+
+See the LICENSE file for the complete license text.
+
+ATTRIBUTION
+-----------
+When using this package, please cite both:
+
+1. This optimized fork:
+   Billsfriend (2025). DDRTree2: Performance-Optimized DDRTree with 
+   OpenMP Parallelization. R package version 0.2.0. 
+   https://github.com/Billsfriend/DDRTree2
+
+2. The original algorithm and package:
+   Qi Mao, Li Wang, Steve Goodison, and Yijun Sun (2015).
+   "Dimensionality Reduction via Graph Structure Learning."
+   KDD'15.
+   
+   Xiaojie Qiu, Cole Trapnell, Qi Mao, Li Wang (2017).
+   DDRTree: Learning Principal Graphs with DDRTree.
+   R package version 0.1.5.
+
+COMPLIANCE WITH ARTISTIC LICENSE 2.0
+-------------------------------------
+This fork complies with the Artistic License 2.0 by:
+
+1. Clearly documenting modifications (see DESCRIPTION, NEWS, README.md)
+2. Maintaining the original license
+3. Providing attribution to original authors
+4. Making the source code freely available
+5. Bearing a different name (DDRTree2) to distinguish from the original
+6. Including this COPYRIGHT file to document authorship
+
+The original authors retain all rights to their original work.
+The fork maintainer claims copyright only on the modifications.

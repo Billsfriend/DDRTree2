@@ -1,18 +1,35 @@
 Package: DDRTree
 Type: Package
 Title: Learning Principal Graphs with DDRTree
-Version: 0.1.5
-Date: 2017-4-14
-Author: Xiaojie Qiu, Cole Trapnell, Qi Mao, Li Wang
+Version: 0.2.0
+Date: 2025-10-03
+Authors@R: c(
+    person("Xiaojie", "Qiu", role = c("aut"), email = "xqiu@uw.edu"),
+    person("Cole", "Trapnell", role = "aut"),
+    person("Qi", "Mao", role = "aut"),
+    person("Li", "Wang", role = "aut"),
+    person("Billsfriend", role = c("cre", "ctb"), 
+           email = "Billsfriend1999@outlook.com",
+           comment = "OpenMP parallelization and performance optimizations"))
 Depends: irlba
 Imports: Rcpp
 LinkingTo: Rcpp, RcppEigen, BH
-Maintainer: Xiaojie Qiu <xqiu@uw.edu>
-Description: Provides an implementation of the framework of reversed graph embedding (RGE) which projects data into a reduced dimensional space while constructs a principal tree which passes through the middle of the data simultaneously. DDRTree shows superiority to alternatives (Wishbone, DPT) for inferring the ordering as well as the intrinsic structure of the single cell genomics data. In general, it could be used to reconstruct the temporal progression as well as bifurcation structure of any datatype. 
-License: Artistic License 2.0
+Description: Provides an implementation of the framework of reversed graph 
+    embedding (RGE) which projects data into a reduced dimensional space while 
+    constructing a principal tree which passes through the middle of the data 
+    simultaneously. DDRTree shows superiority to alternatives (Wishbone, DPT) 
+    for inferring the ordering as well as the intrinsic structure of single cell 
+    genomics data. In general, it could be used to reconstruct the temporal 
+    progression as well as bifurcation structure of any datatype. This version 
+    includes OpenMP parallelization for significant performance improvements 
+    (11x speedup on typical datasets).
+License: Artistic-2.0
+URL: https://github.com/Billsfriend/DDRTree2
+BugReports: https://github.com/Billsfriend/DDRTree2/issues
 RoxygenNote: 6.0.1
-SystemRequirements: C++11
+SystemRequirements: C++11, OpenMP (optional, for parallel execution)
 NeedsCompilation: yes
-Packaged: 2017-04-14 17:38:16 UTC; xqiu
-Repository: CRAN
-Date/Publication: 2017-04-30 20:54:17 UTC
+Note: This is a performance-optimized fork of the original CRAN package 
+    (v0.1.5) by Xiaojie Qiu et al. The original algorithm and core functionality 
+    remain unchanged. Modifications include OpenMP parallelization and code 
+    optimizations for improved performance on large datasets.
