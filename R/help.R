@@ -1,6 +1,6 @@
-#'DDRTree - An algorithm to reduce dimensionality and learning principal graphs simultaneously
+#'DDRTree2 - Performance-Optimized DDRTree with OpenMP Parallelization
 #'
-#' This is an R and C code implementation of the DDRTree algorithm from Qi Mao, Li Wang et al. \cr \cr
+#' This is a performance-optimized fork of the DDRTree algorithm from Qi Mao, Li Wang et al. \cr \cr
 #' Qi Mao, Li Wang, Steve Goodison, and Yijun Sun. Dimensionality Reduction via Graph Structure Learning.
 #' The 21st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD'15), 2015 \cr
 #' \url{http://dl.acm.org/citation.cfm?id=2783309} \cr \cr
@@ -86,9 +86,9 @@
 #'for sparse input data. This implementation is originally based on the matlab code provided from the author of DDRTree paper.
 #'
 #'@docType package
-#'@name DDRTree
+#'@name DDRTree2
 #'@import irlba
 #'@importFrom Rcpp evalCpp
-#'@useDynLib DDRTree
-#'@aliases DDRTree DDRTree-package
+#'@useDynLib DDRTree2
+#'@aliases DDRTree2 DDRTree2-package
 NULL

@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // pca_projection
 SEXP pca_projection(SEXP R_C, int dimensions);
-RcppExport SEXP DDRTree_pca_projection(SEXP R_CSEXP, SEXP dimensionsSEXP) {
+RcppExport SEXP DDRTree2_pca_projection(SEXP R_CSEXP, SEXP dimensionsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -19,7 +19,7 @@ END_RCPP
 }
 // sqdist
 SEXP sqdist(SEXP R_a, SEXP R_b);
-RcppExport SEXP DDRTree_sqdist(SEXP R_aSEXP, SEXP R_bSEXP) {
+RcppExport SEXP DDRTree2_sqdist(SEXP R_aSEXP, SEXP R_bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -31,7 +31,7 @@ END_RCPP
 }
 // DDRTree_reduce_dim
 Rcpp::List DDRTree_reduce_dim(SEXP R_X, SEXP R_Z, SEXP R_Y, SEXP R_W, SEXP R_dimensions, SEXP R_maxiter, SEXP R_num_clusters, SEXP R_sigma, SEXP R_lambda, SEXP R_gamma, SEXP R_eps, SEXP R_verbose);
-RcppExport SEXP DDRTree_DDRTree_reduce_dim(SEXP R_XSEXP, SEXP R_ZSEXP, SEXP R_YSEXP, SEXP R_WSEXP, SEXP R_dimensionsSEXP, SEXP R_maxiterSEXP, SEXP R_num_clustersSEXP, SEXP R_sigmaSEXP, SEXP R_lambdaSEXP, SEXP R_gammaSEXP, SEXP R_epsSEXP, SEXP R_verboseSEXP) {
+RcppExport SEXP DDRTree2_DDRTree_reduce_dim(SEXP R_XSEXP, SEXP R_ZSEXP, SEXP R_YSEXP, SEXP R_WSEXP, SEXP R_dimensionsSEXP, SEXP R_maxiterSEXP, SEXP R_num_clustersSEXP, SEXP R_sigmaSEXP, SEXP R_lambdaSEXP, SEXP R_gammaSEXP, SEXP R_epsSEXP, SEXP R_verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;

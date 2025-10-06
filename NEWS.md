@@ -45,7 +45,7 @@ Control thread count for optimal performance:
 ```r
 # Set before loading the package
 Sys.setenv(OMP_NUM_THREADS = 8)
-library(DDRTree)
+library(DDRTree2)
 ```
 
 Or via shell:
