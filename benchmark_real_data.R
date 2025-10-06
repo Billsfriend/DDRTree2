@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 # Benchmark DDRTree on real-world data with OpenMP optimizations
 
-library(DDRTree)
+library(DDRTree2)
 library(hdf5r)
 
 cat("=== DDRTree Real Data Benchmark ===\n\n")

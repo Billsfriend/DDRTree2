@@ -1,6 +1,6 @@
-Package: DDRTree
+Package: DDRTree2
 Type: Package
-Title: Learning Principal Graphs with DDRTree
+Title: Learning Principal Graphs with DDRTree (Performance-Optimized Fork)
 Version: 0.2.0
 Date: 2025-10-03
 Authors@R: c(
