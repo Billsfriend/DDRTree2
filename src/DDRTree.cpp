@@ -179,7 +179,7 @@ void DDRTree_reduce_dim_cpp(const MatrixXd& X_in,
     MatrixXd C(X_in.rows(), X_in.cols());
     MatrixXd tmp1(X_in.rows(), X_in.rows());
 
-    Environment stats("package:DDRTree");
+    Environment stats("package:DDRTree2");
     Function pca_projection_R = stats["pca_projection_R"];
 
     Function get_major_eigenvalue = stats["get_major_eigenvalue"];
