@@ -11,6 +11,9 @@ Authors@R: c(
     person("Billsfriend", role = c("cre", "ctb"), 
            email = "Billsfriend1999@outlook.com",
            comment = "OpenMP parallelization and performance optimizations"))
+Author: Xiaojie Qiu [aut], Cole Trapnell [aut], Qi Mao [aut], Li Wang [aut],
+    Billsfriend [cre, ctb] (OpenMP parallelization and performance optimizations)
+Maintainer: Billsfriend <Billsfriend1999@outlook.com>
 Depends: irlba
 Imports: Rcpp
 LinkingTo: Rcpp, RcppEigen, BH
