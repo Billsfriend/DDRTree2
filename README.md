@@ -1,10 +1,10 @@
 # DDRTree - Performance-Optimized Fork
 
-[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/Billsfriend/DDRTree2)
+[![r-universe version](https://billsfriend.r-universe.dev/DDRTree2/badges/version)](https://billsfriend.r-universe.dev/DDRTree2)
+[![r-universe status](https://billsfriend.r-universe.dev/DDRTree2/badges/checks)](https://billsfriend.r-universe.dev/DDRTree2)
 [![License](https://img.shields.io/badge/license-Artistic--2.0-green.svg)](LICENSE)
-[![Performance](https://img.shields.io/badge/speedup-11x-brightgreen.svg)](PERFORMANCE_SUMMARY.txt)
 
-An R implementation of the DDRTree algorithm for learning principal graphs, with **11x performance improvement** through OpenMP parallelization.
+An R implementation of the DDRTree algorithm for learning principal graphs, with **10-20x performance improvement** through OpenMP parallelization.
 
 ## Overview
 
@@ -25,13 +25,6 @@ DDRTree (Discriminative Dimensionality Reduction via Learning a Tree) is a frame
 | **Memory Usage** | ~42 MB | ~42 MB | No change |
 | **Numerical Results** | Baseline | Identical | ✓ Verified |
 
-**Speedup by CPU Core Count** (estimated):
-- 4 cores: ~3-4x speedup
-- 8 cores: ~6-7x speedup
-- 16 cores: ~11-13x speedup
-- 32 cores: ~18-22x speedup
-- 80 cores: ~25-30x speedup (near-linear scaling)
-
 ### Key Optimizations
 
 1. **OpenMP Parallelization** - Parallelized soft assignment computation (primary bottleneck)
@@ -50,6 +43,34 @@ install.packages("devtools")
 
 # Install DDRTree2 (optimized version)
 devtools::install_github("Billsfriend/DDRTree2")
+```
+
+### From R-Universe
+
+```r
+# Enable this universe
+options(repos = c(
+    billsfriend = 'https://billsfriend.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'))
+
+# Install package
+install.packages('DDRTree2')
+```
+
+#### Linux binary from R-universe
+
+If you are using Ubuntu 24.04 (noble), binary build from R-Universe may save your time from compiling source in `install.packages()`:
+
+```r
+linux_binary_repo <- function(universe){
+  sprintf('https://%s.r-universe.dev/bin/linux/noble-%s/%s/', 
+    universe,
+    R.version$arch, 
+    substr(getRversion(), 1, 3))
+}
+
+options(repos = linux_binary_repo(c('billsfriend', 'cran')))
+install.packages('DDRTree2')
 ```
 
 ### System Requirements
@@ -116,7 +137,7 @@ Rscript your_script.R
 
 ### Recommended ncenter Calculation
 
-For single-cell data, use this formula to calculate optimal `ncenter`:
+For single-cell data, use this formula from `monocle` package to calculate optimal `ncenter`:
 
 ```r
 ddrt_center <- function(ncells, ncells_limit = 100) {
@@ -127,33 +148,6 @@ ncenter <- ddrt_center(ncol(data))
 result <- DDRTree(data, ncenter = ncenter, ...)
 ```
 
-## Example
-
-```r
-library(DDRTree2)
-
-# Load example data
-data('iris')
-subset_iris_mat <- as.matrix(t(iris[c(1, 2, 52, 103), 1:4]))
-
-# Run DDRTree
-result <- DDRTree(subset_iris_mat, 
-                  dimensions = 2, 
-                  maxIter = 5, 
-                  sigma = 1e-2,
-                  lambda = 1, 
-                  ncenter = 3, 
-                  param.gamma = 10, 
-                  tol = 1e-2, 
-                  verbose = FALSE)
-
-# Visualize reduced dimensions
-plot(result$Z[1, ], result$Z[2, ], 
-     col = iris[c(1, 2, 52, 103), 'Species'],
-     main = "DDRTree Reduced Dimension",
-     xlab = "Dimension 1", ylab = "Dimension 2")
-```
-
 ## Benchmarking
 
 To benchmark on your own data:
@@ -162,18 +156,6 @@ To benchmark on your own data:
 source("benchmark_real_data.R")
 # Follow the script to load your HDF5 data and run benchmarks
 ```
-
-## Scalability
-
-Expected performance on different dataset sizes:
-
-| Dataset Size | Original Time | OpenMP Time | Speedup |
-|--------------|---------------|-------------|---------|
-| 1,000 cells | ~54s | ~5s | ~11x |
-| 5,000 cells | ~4.5min | ~25s | ~11x |
-| 10,000 cells | ~9min | ~49s | ~11x |
-| 20,000 cells | ~18min | ~1.6min | ~11x |
-| 50,000 cells | ~45min | ~4min | ~11x |
 
 ## Citation
 
