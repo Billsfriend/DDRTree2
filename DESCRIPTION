@@ -26,12 +26,13 @@ Description: Provides an implementation of the framework of reversed graph
     progression as well as bifurcation structure of any datatype. This version 
     includes OpenMP parallelization for significant performance improvements 
     (11x speedup on typical datasets).
-License: Artistic-2.0
+License: Artistic-2.0 + file LICENSE
 URL: https://github.com/Billsfriend/DDRTree2
     https://billsfriend.r-universe.dev/DDRTree2
 BugReports: https://github.com/Billsfriend/DDRTree2/issues
 RoxygenNote: 6.0.1
-SystemRequirements: C++11, OpenMP (optional, for parallel execution)
+Encoding: UTF-8
+SystemRequirements: OpenMP (optional, for parallel execution)
 NeedsCompilation: yes
 Note: This is a performance-optimized fork of the original CRAN package 
     (v0.1.5) by Xiaojie Qiu et al. The original algorithm and core functionality 
