@@ -2,14 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 pca_projection <- function(R_C, dimensions) {
-    .Call('DDRTree2_pca_projection', PACKAGE = 'DDRTree2', R_C, dimensions)
+    .Call('_DDRTree2_pca_projection', PACKAGE = 'DDRTree2', R_C, dimensions)
 }
 
 sqdist <- function(R_a, R_b) {
-    .Call('DDRTree2_sqdist', PACKAGE = 'DDRTree2', R_a, R_b)
+    .Call('_DDRTree2_sqdist', PACKAGE = 'DDRTree2', R_a, R_b)
 }
 
 DDRTree_reduce_dim <- function(R_X, R_Z, R_Y, R_W, R_dimensions, R_maxiter, R_num_clusters, R_sigma, R_lambda, R_gamma, R_eps, R_verbose) {
-    .Call('DDRTree2_DDRTree_reduce_dim', PACKAGE = 'DDRTree2', R_X, R_Z, R_Y, R_W, R_dimensions, R_maxiter, R_num_clusters, R_sigma, R_lambda, R_gamma, R_eps, R_verbose)
+    .Call('_DDRTree2_DDRTree_reduce_dim', PACKAGE = 'DDRTree2', R_X, R_Z, R_Y, R_W, R_dimensions, R_maxiter, R_num_clusters, R_sigma, R_lambda, R_gamma, R_eps, R_verbose)
 }
 
