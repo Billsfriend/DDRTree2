@@ -84,11 +84,17 @@
 #'@section Implementation of DDRTree algorithm:
 #'We implemented the algorithm mostly in Rcpp for the purpose of efficiency. It also has extensive optimization
 #'for sparse input data. This implementation is originally based on the matlab code provided from the author of DDRTree paper.
-#'
-#'@docType package
-#'@name DDRTree2
+
+#' @references 
+#' Qi Mao, Li Wang, Steve Goodison, and Yijun Sun. Dimensionality Reduction via Graph Structure Learning. The 21st ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD'15), 2015 \url{http://dl.acm.org/citation.cfm?id=2783309}
+
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
 #'@import irlba
 #'@importFrom Rcpp evalCpp
 #'@useDynLib DDRTree2
 #'@aliases DDRTree2 DDRTree2-package
+## usethis namespace: end
 NULL
