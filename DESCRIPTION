@@ -28,7 +28,6 @@ Description: Provides an implementation of the framework of reversed graph
     (11x speedup on typical datasets).
 License: Artistic-2.0 | file LICENSE
 URL: https://github.com/Billsfriend/DDRTree2
-    https://billsfriend.r-universe.dev/DDRTree2
 BugReports: https://github.com/Billsfriend/DDRTree2/issues
 RoxygenNote: 7.3.3
 Encoding: UTF-8
